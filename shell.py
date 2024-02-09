@@ -1,9 +1,10 @@
-from interpreter import Interpreter
+from interpreter import Interpreter, Lexer
 
 def shell():
     while True:
         text = input("shell> ")
-        interpre = Interpreter(text)
+        lexer = Lexer(text)
+        interpre = Interpreter(lexer)
         res = interpre.expr()
         print(res)
 

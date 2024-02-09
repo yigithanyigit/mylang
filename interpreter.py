@@ -24,17 +24,12 @@ class Token:
         return f"Token({self.type}: {self.value})"
 
 
-class Interpreter:
-    def __init__(self, text) -> None:
+
+class Lexer:
+    def __init__(self, text):
         self.text = text 
         self.pos = 0
         self.current_char = text[self.pos]
-        self.current_token = self.get_next_token()
-        self.op_list = (TYPE_PLUS, TYPE_MINUS, TYPE_DIV, TYPE_MUL)
-
-    def error(self) -> None:
-        raise Exception('Error While Parsing input')
-
 
     def advance(self) -> None:
         self.pos += 1
@@ -43,7 +38,9 @@ class Interpreter:
 
         else:
             self.current_char = self.text[self.pos]
-             
+
+    def error(self) -> None:
+        raise Exception('Error While Parsing input')
 
     def make_number(self):
         number = ''
@@ -106,12 +103,23 @@ class Interpreter:
             self.error()
 
         return Token(TYPE_EOF, None)
-                
-        
+
+
+
+
+class Interpreter:
+    def __init__(self, lexer) -> None:
+        self.lexer = lexer
+        self.current_token = self.lexer.get_next_token()
+        self.op_list = (TYPE_PLUS, TYPE_MINUS, TYPE_DIV, TYPE_MUL)
+
+    def error(self) -> None:
+        raise Exception('Error While Parsing input')
+                     
 
     def eat(self, token_type):
         if self.current_token.type == token_type:
-            self.current_token = self.get_next_token()
+            self.current_token = self.lexer.get_next_token()
         else:
             self.error()
 
